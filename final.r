@@ -1,0 +1,32 @@
+dataset = read.csv("C:\\Users\\ibrah\\Desktop\\prediction.csv")
+dataset$Main=factor(dataset$Main,
+                    levels=c('Potatoes','Tomatoes','Onions','Carrots','Milk','Chicken','Mutton','Fish','Egg','Lettuce','Pumpkin','Grapes','Strawberries','Bananas','Blueberries','Cake','Orange','Cucumbers','Spinach','Yogurt'),
+                    labels=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))
+dataset$Side=factor(dataset$Side,
+                    levels=c('Potatoes','Tomatoes','Onions','Carrots','Milk','Chicken','Mutton','Fish','Egg','Lettuce','Pumpkin','Grapes','Strawberries','Bananas','Blueberries','Cake','Orange','Cucumbers','Spinach','Yogurt'),
+                    labels=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))
+dataset$State=factor(dataset$State,
+                     levels=c('Dry','Wet'),
+                     labels=c(0,1))
+dataset$Season=factor(dataset$Season,
+                      levels=c('Summer','Winter'),
+                      labels=c(0,1))
+#install.packages('caTools')
+library(caTools)
+set.seed(11)
+#split=sample.split(dataset$Expiry,SplitRatio=0.75)
+train_set=dataset[1:263,1:7]
+test_set=dataset[264,1:7]
+#train_set=subset(dataset,split==TRUE)
+#test_set=subset(dataset,split==FALSE)
+#train_set[,1:2]=scale(train_set[,1:2])
+#test_set[,1:2]=scale(test_set[,1:2])
+regressor=lm(formula=Expiry~.,train_set)
+pred=predict(regressor,newdata = test_set)
+print(pred)
+print(pred*24)
+install.packages("ggplot2")
+library(ggplot2)
+p=ggplot(data=dataset,aes(x=Temperature,y=Expiry,colour=Main,size=Side))
+p+geom_point()
+summary(dataset)
